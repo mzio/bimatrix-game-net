@@ -3,6 +3,10 @@ import pandas as pd
 import argparse
 import itertools
 
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
 from tqdm import tqdm
 
 from data_utils import get_payoff_matrices, transform, expand_channels, get_splits
@@ -56,13 +60,13 @@ def evaluate(model, dataloader, model_softmax=False):
 
 def train(model, loss_fn, dataloader, dataloader_val=None, epochs=200,
           log_targets=False, model_softmax=True, log=5, log_softmax_outputs=False,
-          val_data=None, val_labels=None):
+          val_data=None, val_labels=None, seed=None, device=None):
 
     softmax_fn = nn.Softmax(dim=1)
     log_softmax_fn = nn.LogSoftmax(dim=1)
 
     dataloader_actual_val = load_game_data(
-        val_data, val_labels, batch_size=1, shuffle=False)
+        val_data, val_labels, batch_size=1, shuffle=False, seed=seed, device=device)
     loss_total = []
     acc_total = []
     acc_total_val = []
@@ -71,7 +75,7 @@ def train(model, loss_fn, dataloader, dataloader_val=None, epochs=200,
         for batch_ix, (data, label) in enumerate(dataloader):
             output = model(data)
             target = torch.tensor(
-                np.argmax(np.array(label.cpu()), axis=1), dtype=torch.long).to(DEVICE)
+                np.argmax(np.array(label.cpu()), axis=1), dtype=torch.long).to(device)
             optimizer.zero_grad()
             # loss = 1.0 * mse_loss(softmax(output), label) + 0.0 * ce_loss(output, target)
             if log_targets:
@@ -102,6 +106,9 @@ if __name__ == "__main__":
     parser.add_argument('--seed', default=42, type=int)
     parser.add_argument('--data_path', default='.', type=str)
     parser.add_argument('--save_model_path', default='./models', type=str)
+    # Data
+    parser.add_argument('--channel', default='all', type=str,
+                        help="One of 'all', 'payoffs', 'diffs', 'row'")
     # Model hyperparameters
     parser.add_argument('-bs', '--batch_size', default=4, type=int)
     parser.add_argument('-lr', '--learning_rate', default=1e-4, type=float)
@@ -109,7 +116,7 @@ if __name__ == "__main__":
     parser.add_argument('-wd', '--weight_decay', default=1e-4, type=float)
     # Training setup
     parser.add_argument('-kf', '--k_folds', default=5, type=str)
-    parser.add_argument('--loss', default='mse', type='str',
+    parser.add_argument('--loss', default='mse', type=str,
                         help="Loss criterion. Either 'mse' or 'kl' supported.")
     parser.add_argument('-e', '--epochs', default=200, type=int)
     parser.add_argument('--log', default=50, type=int,
@@ -154,7 +161,7 @@ if __name__ == "__main__":
     game_labels = np.array(augmented_labels).reshape(250 * 6, 3)
 
     # Get desired channels
-    game_data = expand_channels(game_data, channels='all')
+    game_data = expand_channels(game_data, channels=args.channel)
 
     # Shuffle data first
     game_ix = list(range(len(game_data)))
@@ -191,11 +198,12 @@ if __name__ == "__main__":
                                         seed=args.seed, device=args.device, shuffle=False)
         losses, acc = train(model, criterion, dataloader, dataloader_val, epochs=args.epochs,
                             log_targets=False, model_softmax=True, log=args.log,
-                            val_data=test_data, val_labels=test_labels)
+                            val_data=test_data, val_labels=test_labels,
+                            seed=args.seed, device=args.device)
 
         dataloader_val = load_game_data(test_data, test_labels, batch_size=1,
                                         seed=args.seed, device=args.device, shuffle=False)
-        batch_ql, acc, predictions = evaluate(model_all, dataloader_val)
+        batch_ql, acc, predictions = evaluate(model, dataloader_val)
 
         split_quadratic_losses.append(batch_ql)
         split_accuracies.append(acc)

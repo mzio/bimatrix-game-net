@@ -9,7 +9,7 @@ class ConvNetBig(nn.Module):
     """
 
     def __init__(self, log_softmax=False, softmax=True, dropout=0., channels=3):
-        super(ConvNetPdBig, self).__init__()
+        super(ConvNetBig, self).__init__()
         self.log = log_softmax
         self.soft = softmax
         # Input: 3 channels, 8 output channels, 3x3 conv -> 8x3x3 output
