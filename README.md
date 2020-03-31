@@ -33,5 +33,5 @@ python train.py
 
 More information regarding training arguments can be found in `train.py`.  
 
-We also include a set of pretrained models in `models/` and complementary notebooks for the code and our write-up in `notebooks/'.
+We also include a set of pretrained models in `models/` and complementary notebooks for the code and our write-up in `notebooks/`.
 
