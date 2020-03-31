@@ -102,7 +102,7 @@ if __name__ == "__main__":
         np.mean([dfs[i]['f3'] for i in range(4)], axis=0)
     ]).transpose([1, 0])
 
-    actions = np.argmax(np.array(avg_freq), axis=1)
+    actions = np.argmax(np.array(avg_freq), axis=1) + 1.
 
     df_avg = pd.DataFrame(avg_freq, columns=['f1', 'f2', 'f3'])
     df_avg['action'] = actions
