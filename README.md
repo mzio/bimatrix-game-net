@@ -1,6 +1,6 @@
-![Attention Payoffs](./writeup/grad-cam.png)
-
 # Bi-matrix Game Human Behavior Forecast Contest
+
+![Attention Payoffs](./writeup/grad-cam.png)
 
 Code for our model and training setup for Pset 1, CS236r Spring 2020.
 
