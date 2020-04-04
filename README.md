@@ -1,4 +1,4 @@
-![Attention Payoffs](./writeup/grad-cam.pdf?raw=true "Grad-CAM of Payoff Matrices")
+![Attention Payoffs](./writeup/grad-cam.pdf)
 
 # Bi-matrix Game Human Behavior Forecast Contest
 
