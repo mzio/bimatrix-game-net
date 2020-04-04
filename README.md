@@ -1,3 +1,5 @@
+![Attention Payoffs](./writeup/grad-cam.pdf?raw=true "Grad-CAM of Payoff Matrices")
+
 # Bi-matrix Game Human Behavior Forecast Contest
 
 Code for our model and training setup for Pset 1, CS236r Spring 2020.
