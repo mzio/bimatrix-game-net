@@ -104,7 +104,7 @@ def get_splits(data, labels, num_splits):
                                        test_data, test_labels]
     """
     splits = []
-    kf = KFold(n_splits=NUM_SPLITS)
+    kf = KFold(n_splits=num_splits)
     for train_val_ix, test_ix in kf.split(data):
         train_val_data, test_data = np.array(
             data[train_val_ix]), np.array(data[test_ix])

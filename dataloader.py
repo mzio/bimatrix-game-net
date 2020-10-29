@@ -17,6 +17,7 @@ class GameDataset(Dataset):
         self.samples = []
         self.data = data
         self.labels = labels
+        self.device = device
         self.load_samples()
 
     def __len__(self):
@@ -28,8 +29,8 @@ class GameDataset(Dataset):
     def load_samples(self):
         for ix in range(self.data.shape[0]):
             self.samples.append((
-                torch.tensor(self.data[ix], dtype=torch.float).to(DEVICE),
-                torch.tensor(self.labels[ix], dtype=torch.float).to(DEVICE)))
+                torch.tensor(self.data[ix], dtype=torch.float).to(self.device),
+                torch.tensor(self.labels[ix], dtype=torch.float).to(self.device)))
 
 
 def load_game_data(data, labels, batch_size, seed, device, shuffle=True):
