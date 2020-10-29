@@ -1,6 +1,6 @@
 # Bi-matrix Game Human Behavior Forecast Contest
 
-![Attention Payoffs](./writeup/grad-cam.png)
+![Attention Payoffs](./writeup_src/grad-cam.png)
 
 Code for our model and training setup for Pset 1, CS236r Spring 2020.
 
@@ -35,5 +35,9 @@ python train.py
 
 More information regarding training arguments can be found in `train.py`.  
 
-We also include a set of pretrained models in `models/` and complementary notebooks for the code and our write-up in `notebooks/`.
+We also include a set of pretrained models in `models/` and complementary notebooks for the code and our write-up in `notebooks/`.  
+
+---
+
+Check out `cs236-pset1-writeup.pdf` for more info! 
 
